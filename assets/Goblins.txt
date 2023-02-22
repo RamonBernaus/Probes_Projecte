@@ -1,0 +1,349 @@
+
+Goblins.png
+size: 332, 332
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+GoblinAtacBack-1
+  rotate: false
+  xy: 242, 124
+  size: 31, 49
+  orig: 62, 62
+  offset: 16, 5
+  index: -1
+GoblinAtacBack-10
+  rotate: false
+  xy: 196, 237
+  size: 30, 56
+  orig: 62, 62
+  offset: 20, 6
+  index: -1
+GoblinAtacBack-11
+  rotate: false
+  xy: 275, 176
+  size: 28, 49
+  orig: 62, 62
+  offset: 26, 6
+  index: -1
+GoblinAtacBack-2
+  rotate: false
+  xy: 232, 18
+  size: 30, 51
+  orig: 62, 62
+  offset: 20, 3
+  index: -1
+GoblinAtacBack-3
+  rotate: false
+  xy: 237, 226
+  size: 32, 50
+  orig: 62, 62
+  offset: 22, 5
+  index: -1
+GoblinAtacBack-4
+  rotate: false
+  xy: 242, 175
+  size: 31, 49
+  orig: 62, 62
+  offset: 26, 5
+  index: -1
+GoblinAtacBack-5
+  rotate: false
+  xy: 201, 13
+  size: 29, 51
+  orig: 62, 62
+  offset: 30, 3
+  index: -1
+GoblinAtacBack-6
+  rotate: false
+  xy: 114, 112
+  size: 32, 50
+  orig: 62, 62
+  offset: 16, 5
+  index: -1
+GoblinAtacBack-7
+  rotate: false
+  xy: 271, 227
+  size: 33, 49
+  orig: 62, 62
+  offset: 16, 6
+  index: -1
+GoblinAtacBack-8
+  rotate: false
+  xy: 242, 73
+  size: 30, 49
+  orig: 62, 62
+  offset: 17, 6
+  index: -1
+GoblinAtacBack-9
+  rotate: false
+  xy: 129, 228
+  size: 30, 56
+  orig: 62, 62
+  offset: 16, 6
+  index: -1
+GoblinAtacFront-1
+  rotate: false
+  xy: 174, 177
+  size: 29, 55
+  orig: 62, 62
+  offset: 18, 7
+  index: -1
+GoblinAtacFront-10
+  rotate: false
+  xy: 113, 57
+  size: 29, 53
+  orig: 62, 62
+  offset: 21, 1
+  index: -1
+GoblinAtacFront-11
+  rotate: false
+  xy: 81, 112
+  size: 31, 50
+  orig: 62, 62
+  offset: 25, 9
+  index: -1
+GoblinAtacFront-2
+  rotate: false
+  xy: 112, 164
+  size: 28, 57
+  orig: 62, 62
+  offset: 20, 4
+  index: -1
+GoblinAtacFront-3
+  rotate: false
+  xy: 179, 120
+  size: 30, 55
+  orig: 62, 62
+  offset: 17, 7
+  index: -1
+GoblinAtacFront-4
+  rotate: false
+  xy: 142, 171
+  size: 30, 55
+  orig: 62, 62
+  offset: 15, 7
+  index: -1
+GoblinAtacFront-5
+  rotate: false
+  xy: 82, 164
+  size: 28, 57
+  orig: 62, 62
+  offset: 16, 4
+  index: -1
+GoblinAtacFront-6
+  rotate: false
+  xy: 205, 180
+  size: 30, 55
+  orig: 62, 62
+  offset: 16, 7
+  index: -1
+GoblinAtacFront-7
+  rotate: false
+  xy: 46, 113
+  size: 33, 53
+  orig: 62, 62
+  offset: 14, 9
+  index: -1
+GoblinAtacFront-8
+  rotate: false
+  xy: 161, 234
+  size: 33, 56
+  orig: 62, 62
+  offset: 13, 6
+  index: -1
+GoblinAtacFront-9
+  rotate: false
+  xy: 148, 114
+  size: 29, 55
+  orig: 62, 62
+  offset: 16, 0
+  index: -1
+GoblinAtacLeft-1
+  rotate: false
+  xy: 108, 2
+  size: 34, 53
+  orig: 62, 62
+  offset: 15, 6
+  index: -1
+GoblinAtacLeft-10
+  rotate: false
+  xy: 2, 113
+  size: 42, 53
+  orig: 62, 62
+  offset: 4, 6
+  index: -1
+GoblinAtacLeft-11
+  rotate: false
+  xy: 2, 3
+  size: 35, 53
+  orig: 62, 62
+  offset: 21, 6
+  index: -1
+GoblinAtacLeft-2
+  rotate: false
+  xy: 2, 168
+  size: 46, 52
+  orig: 62, 62
+  offset: 12, 6
+  index: -1
+GoblinAtacLeft-3
+  rotate: false
+  xy: 279, 278
+  size: 36, 52
+  orig: 62, 62
+  offset: 8, 7
+  index: -1
+GoblinAtacLeft-4
+  rotate: false
+  xy: 50, 168
+  size: 30, 52
+  orig: 62, 62
+  offset: 11, 7
+  index: -1
+GoblinAtacLeft-5
+  rotate: false
+  xy: 211, 71
+  size: 29, 52
+  orig: 62, 62
+  offset: 17, 6
+  index: -1
+GoblinAtacLeft-6
+  rotate: false
+  xy: 211, 125
+  size: 29, 53
+  orig: 62, 62
+  offset: 14, 6
+  index: -1
+GoblinAtacLeft-7
+  rotate: false
+  xy: 39, 3
+  size: 30, 53
+  orig: 62, 62
+  offset: 12, 6
+  index: -1
+GoblinAtacLeft-8
+  rotate: false
+  xy: 52, 223
+  size: 45, 53
+  orig: 62, 62
+  offset: 17, 6
+  index: -1
+GoblinAtacLeft-9
+  rotate: false
+  xy: 2, 277
+  size: 48, 53
+  orig: 62, 62
+  offset: 5, 6
+  index: -1
+GoblinAtacRight-1
+  rotate: false
+  xy: 99, 223
+  size: 28, 53
+  orig: 62, 62
+  offset: 14, 8
+  index: -1
+GoblinAtacRight-10
+  rotate: false
+  xy: 2, 58
+  size: 40, 53
+  orig: 62, 62
+  offset: 17, 8
+  index: -1
+GoblinAtacRight-11
+  rotate: false
+  xy: 71, 2
+  size: 35, 53
+  orig: 62, 62
+  offset: 22, 8
+  index: -1
+GoblinAtacRight-2
+  rotate: false
+  xy: 171, 3
+  size: 28, 52
+  orig: 62, 62
+  offset: 14, 8
+  index: -1
+GoblinAtacRight-3
+  rotate: false
+  xy: 179, 66
+  size: 30, 52
+  orig: 62, 62
+  offset: 19, 9
+  index: -1
+GoblinAtacRight-4
+  rotate: false
+  xy: 241, 278
+  size: 36, 52
+  orig: 62, 62
+  offset: 16, 9
+  index: -1
+GoblinAtacRight-5
+  rotate: false
+  xy: 52, 278
+  size: 47, 52
+  orig: 62, 62
+  offset: 10, 8
+  index: -1
+GoblinAtacRight-6
+  rotate: false
+  xy: 76, 57
+  size: 35, 53
+  orig: 62, 62
+  offset: 15, 8
+  index: -1
+GoblinAtacRight-7
+  rotate: false
+  xy: 44, 58
+  size: 30, 53
+  orig: 62, 62
+  offset: 20, 8
+  index: -1
+GoblinAtacRight-8
+  rotate: false
+  xy: 144, 2
+  size: 25, 53
+  orig: 62, 62
+  offset: 21, 8
+  index: -1
+GoblinAtacRight-9
+  rotate: false
+  xy: 2, 222
+  size: 48, 53
+  orig: 62, 62
+  offset: 7, 8
+  index: -1
+GoblinDeath-1
+  rotate: false
+  xy: 144, 57
+  size: 33, 53
+  orig: 62, 62
+  offset: 12, 7
+  index: -1
+GoblinDeath-2
+  rotate: false
+  xy: 275, 128
+  size: 30, 46
+  orig: 62, 62
+  offset: 17, 2
+  index: -1
+GoblinDeath-3
+  rotate: false
+  xy: 196, 295
+  size: 43, 35
+  orig: 62, 62
+  offset: 9, 2
+  index: -1
+GoblinDeath-4
+  rotate: false
+  xy: 150, 292
+  size: 44, 38
+  orig: 62, 62
+  offset: 7, 0
+  index: -1
+GoblinDeath-5
+  rotate: false
+  xy: 101, 286
+  size: 47, 44
+  orig: 62, 62
+  offset: 6, 0
+  index: -1
