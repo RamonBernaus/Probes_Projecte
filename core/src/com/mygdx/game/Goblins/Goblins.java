@@ -1,5 +1,6 @@
 package com.mygdx.game.Goblins;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
@@ -8,19 +9,19 @@ public class Goblins {
     public static final float Height = 64;
 
 
-    static final float Draw_Width = 1.3f;
-    static final float Draw_Height = 1.7f;
+    public static final float Draw_Width = 1.3f;
+    public static final float Draw_Height = 1.7f;
 
     static final float Walk_Frame_Duration = 0.25f;
 
     static final float WALK_SPEED = 3;
 
-    boolean Right;
-    boolean Left;
-    boolean Front;
-    boolean Back;
+    public boolean Right;
+    public boolean Left;
+    public boolean Front;
+    public boolean Back;
 
-    float stateTime = 0;
+    public float stateTime = 0;
     private GoblinsState state;
     public Vector2 position;
     public Vector2 velocity;
@@ -34,7 +35,7 @@ public class Goblins {
 
         velocity = body.getLinearVelocity();
 
-        if (accelX == -1) {
+        /*if (accelX == -1) {
             velocity.x = -WALK_SPEED;
             Left = !Right && !Front && !Back;
         } else if (accelX == 1) {
@@ -52,11 +53,12 @@ public class Goblins {
             Back = !Left && !Front && !Back;
         } else {
             velocity.y = 0;
-        }
+        }*/
 
         body.setLinearVelocity(velocity);
         stateTime += delta;
     }
+
 
 
 

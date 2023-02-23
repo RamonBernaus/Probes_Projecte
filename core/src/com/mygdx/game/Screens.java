@@ -9,12 +9,15 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.mygdx.game.Guts.GameScreen;
 
 public abstract class Screens extends InputAdapter implements Screen {
-    public static final float SCREEN_WIDTH = 800;
-    public static final float SCREEN_HEIGHT = 480;
+    public static final float SCREEN_WIDTH = 1600;
+    public static final float SCREEN_HEIGHT = 800;
 
     public static final float WORLD_WIDTH = 8f;
     public static final float WORLD_HEIGHT = 4.8f;
@@ -72,6 +75,13 @@ public abstract class Screens extends InputAdapter implements Screen {
         // Draw the game elements on the screen
         draw(delta);
 
+        // Spawnear un Goblin cada 2 segundos en una posición aleatoria
+        /*if (TimeUtils.nanoTime() % 2000000000 == 0) {
+            float x = MathUtils.random(0, Gdx.graphics.getWidth());
+            float y = MathUtils.random(0, Gdx.graphics.getHeight());
+            GameScreen.spawnGoblin(x, y);
+        }*/
+
         // Draw the stage element on the screen
         stage.draw();
     }
@@ -117,6 +127,12 @@ public abstract class Screens extends InputAdapter implements Screen {
             } else {
                 game.setScreen(new MainScreens(game));
             }
+        return super.keyDown(keycode);
+    }
+    @Override
+    public boolean keyUp(int keycode) {
+        if (keycode == Input.Keys.ENTER || keycode == Input.Keys.SPACE)
+                game.setScreen(new MainScreens(game));
         return super.keyDown(keycode);
     }
 }

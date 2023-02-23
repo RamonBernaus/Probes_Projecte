@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -26,7 +27,6 @@ public class MainScreens extends Screens{
                     setScreen(main);
                 }
             });
-
             menu.row().padTop(15).height(50);
             menu.add(bt).fillX();
         }

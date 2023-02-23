@@ -8,7 +8,7 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setTitle("Projecte_2");
-		config.setWindowedMode(800, 480);
+		config.setWindowedMode(1600, 800);
 		new Lwjgl3Application(new MainGame(), config);
 	}
 }

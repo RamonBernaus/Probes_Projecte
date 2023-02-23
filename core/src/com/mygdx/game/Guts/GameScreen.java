@@ -30,44 +30,30 @@ public class GameScreen extends Screens {
     Array<Body> arrBodies;
 
     List<Goblins> goblinsList;
+    private static Array<Goblins> goblins;
 
     Box2DDebugRenderer renderer;
 
-    Sprite keyframe;
+    Sprite keyframeGuts;
+    Sprite keyframeGoblins;
 
     public GameScreen(MainGame game) {
         super(game);
         AssetsManager.load();
+        AssetsGoblins.load();
 
         Vector2 gravity = new Vector2(0, 0);
         oWorld = new World(gravity, true);
 
         arrBodies = new Array<>();
+        goblins = new Array<Goblins>();
 
-        this.goblinsList = new ArrayList<Goblins>();
+        //this.goblinsList = new ArrayList<Goblins>();
 
         renderer = new Box2DDebugRenderer();
 
-        createFloor();
         createGuts();
         createGoblins();
-    }
-
-    private void createFloor() {
-        BodyDef bd = new BodyDef();
-        bd.position.set(0, .6f);
-        bd.type = BodyDef.BodyType.StaticBody;
-
-        EdgeShape shape = new EdgeShape();
-        shape.set(0, 0, WORLD_WIDTH, 0);
-
-        FixtureDef fixDef = new FixtureDef();
-        fixDef.shape = shape;
-        fixDef.friction = 1f;
-
-        Body oBody = oWorld.createBody(bd);
-        oBody.createFixture(fixDef);
-        shape.dispose();
     }
 
     private void createGuts() {
@@ -83,6 +69,7 @@ public class GameScreen extends Screens {
 
         Body oBody = oWorld.createBody(bd);
         oBody.setUserData(guts);
+
         shape.dispose();
     }
 
@@ -96,9 +83,15 @@ public class GameScreen extends Screens {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Goblins.Width, Goblins.Height);
 
+        FixtureDef fixDef = new FixtureDef();
+        fixDef.shape = shape;
+        fixDef.restitution = 0;
+        fixDef.density = 15;
 
         Body oBody = oWorld.createBody(bd);
+        oBody.createFixture(fixDef);
         oBody.setUserData(goblin);
+
         shape.dispose();
     }
 
@@ -106,17 +99,40 @@ public class GameScreen extends Screens {
     public void update(float delta) {
         float accelX = 0, accelY = 0;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){
             accelX = -1;
-        else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            guts.Left = false;
+            guts.Right = true;
+            guts.Front = false;
+            guts.Back = false;
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             accelX = 1;
-
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
+            guts.Right = false;
+            guts.Left = true;
+            guts.Front = false;
+            guts.Back = false;
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             accelY = -1;
-
-        else if (Gdx.input.isKeyPressed(Input.Keys.UP))
+            guts.Left = false;
+            guts.Right = false;
+            guts.Front = true;
+            guts.Back = false;
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             accelY = 1;
-
+            guts.Left = false;
+            guts.Right = false;
+            guts.Front = false;
+            guts.Back = true;
+        }
+        else {
+            guts.Left = false;
+            guts.Right = false;
+            guts.Front = false;
+            guts.Back = false;
+        }
 
         oWorld.step(delta, 8, 6);
         oWorld.getBodies(arrBodies);
@@ -128,7 +144,7 @@ public class GameScreen extends Screens {
             }
         }
 
-        for (Goblins goblins : goblinsList) {
+/*        for (Goblins goblins : goblinsList) {
             switch (goblins.getState()) {
                 case IDLE:
                     // Si el personaje está dentro del rango de detección del enemigo, cambia al estado de persecución
@@ -150,7 +166,7 @@ public class GameScreen extends Screens {
                     //guts.takeDamage(10);
                     break;
             }
-        }
+        }*/
     }
 
     @Override
@@ -158,7 +174,7 @@ public class GameScreen extends Screens {
         oCamUI.update();
         spriteBatch.setProjectionMatrix(oCamUI.combined);
 
-        Viewport viewport = new FitViewport(640, 480); // crea un viewport con dimensiones iniciales
+        Viewport viewport = new FitViewport(1600, 800); // crea un viewport con dimensiones iniciales
         Assets.backgroundSprite.setSize(viewport.getWorldWidth(), viewport.getWorldHeight());
 
 
@@ -172,44 +188,67 @@ public class GameScreen extends Screens {
         spriteBatch.begin();
 
         drawGuts();
+        //drawGoblins();
 
         spriteBatch.end();
         renderer.render(oWorld, oCamBox2D.combined);
     }
 
     private void drawGuts() {
-        keyframe = AssetsManager.straight;
+        keyframeGuts = AssetsManager.straight;
 
         if (guts.Front) {
-            keyframe = AssetsManager.walkFront.getKeyFrame(guts.stateTime, true);
+            keyframeGuts = AssetsManager.walkFront.getKeyFrame(guts.stateTime, true);
         } else if (guts.Back) {
-            keyframe = AssetsManager.walkBack.getKeyFrame(guts.stateTime, true);
+            keyframeGuts = AssetsManager.walkBack.getKeyFrame(guts.stateTime, true);
         } else if (guts.Right) {
-            keyframe = AssetsManager.walkRight.getKeyFrame(guts.stateTime, true);
+            keyframeGuts = AssetsManager.walkRight.getKeyFrame(guts.stateTime, true);
         } else if (guts.Left) {
-            keyframe = AssetsManager.walkLeft.getKeyFrame(guts.stateTime, true);
+            keyframeGuts = AssetsManager.walkLeft.getKeyFrame(guts.stateTime, true);
         }
 
-        if (guts.velocity.x < 0) {
-            keyframe.setPosition(guts.position.x + Guts.Draw_Width/2, guts.position.y - Guts.Draw_Height/2 + .25f);
-            keyframe.setSize(-Guts.Draw_Width, Guts.Draw_Height);
+        if (guts.velocity.x <= 0 || guts.velocity.y <= 0) {
+            keyframeGuts.setPosition(guts.position.x + Guts.Draw_Width/2, guts.position.y - Guts.Draw_Height/2 + .25f);
+            keyframeGuts.setSize(-Guts.Draw_Width, Guts.Draw_Height);
         } else {
-            keyframe.setPosition(guts.position.x - Guts.Draw_Width/2, guts.position.y - Guts.Draw_Height/2 + .25f);
-            keyframe.setSize(Guts.Draw_Width, Guts.Draw_Height);
+            keyframeGuts.setPosition(guts.position.x - Guts.Draw_Width/2, guts.position.y - Guts.Draw_Height/2 + .25f);
+            keyframeGuts.setSize(Guts.Draw_Width, Guts.Draw_Height);
 
         }
 
-        keyframe.draw(spriteBatch);
+        keyframeGuts.draw(spriteBatch);
     }
 
     private void drawGoblins() {
-        keyframe = AssetsGoblins.straight;
+        keyframeGoblins = AssetsGoblins.straight;
+
+        if (goblin.Front) {
+            keyframeGoblins = AssetsManager.walkFront.getKeyFrame(goblin.stateTime, true);
+        } else if (goblin.Back) {
+            keyframeGoblins = AssetsManager.walkBack.getKeyFrame(goblin.stateTime, true);
+        } else if (goblin.Right) {
+            keyframeGoblins = AssetsManager.walkRight.getKeyFrame(goblin.stateTime, true);
+        } else if (goblin.Left) {
+            keyframeGoblins = AssetsManager.walkLeft.getKeyFrame(goblin.stateTime, true);
+        }
+
+        if (goblin.velocity.x < 0) {
+            keyframeGoblins.setPosition(goblin.position.x + Goblins.Draw_Width/2, goblin.position.y - Goblins.Draw_Height/2 + .25f);
+            keyframeGoblins.setSize(-Goblins.Draw_Width, Goblins.Draw_Height);
+        } else {
+            keyframeGoblins.setPosition(goblin.position.x - Goblins.Draw_Width/2, goblin.position.y - Goblins.Draw_Height/2 + .25f);
+            keyframeGoblins.setSize(Goblins.Draw_Width, Goblins.Draw_Height);
+
+        }
+
+        keyframeGoblins.draw(spriteBatch);
     }
 
 
     @Override
     public void dispose() {
         AssetsManager.dispose();
+        AssetsGoblins.dispose();
         oWorld.dispose();
         super.dispose();
     }

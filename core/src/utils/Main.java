@@ -4,8 +4,8 @@ import com.mygdx.game.Guts.GameScreen;
 import com.mygdx.game.Screens;
 
 public enum Main {
-    GAME("Iniciar el juego", GameScreen.class),
-    GAME2("Acabar joc", GameScreen.class);
+    GAME("Iniciar el juego", GameScreen.class);
+    //GAME2("Acabar joc", GameScreen.class);
 
     public final String name;
     public final Class<? extends Screens> clazz;
