@@ -26,7 +26,7 @@ public abstract class Screens extends InputAdapter implements Screen {
 
     public OrthographicCamera oCamUI;
     public OrthographicCamera oCamBox2D;
-    public SpriteBatch spriteBatch;
+    public static SpriteBatch spriteBatch;
     public Stage stage;
 
     public Screens(MainGame game) {

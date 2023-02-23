@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -17,7 +18,7 @@ public class Assets {
     public static TextButton.TextButtonStyle txButtonStyle;
     public static Label.LabelStyle labelStyle;
     public static ScrollPane.ScrollPaneStyle scrollPaneStyle;
-    public static Texture backgroundTexture = new Texture("BackgroundMenu.png");
+    public static Texture backgroundTexture = new Texture("BackgroundMenuTitle.jpg");
     public static Sprite backgroundSprite = new Sprite(backgroundTexture);
 
     public static void load() {
@@ -35,4 +36,5 @@ public class Assets {
                 atlas.createPatch("scroll"));
         scrollPaneStyle = new ScrollPane.ScrollPaneStyle(null, knob, knob, knob, knob);
     }
+
 }

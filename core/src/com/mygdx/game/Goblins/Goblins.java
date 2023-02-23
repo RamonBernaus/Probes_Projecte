@@ -29,31 +29,33 @@ public class Goblins {
     public Goblins(float x, float y) {
         position = new Vector2(x, y);
     }
+
     public void update(Body body, float delta, float accelX, float accelY) {
         position.x = body.getPosition().x;
         position.y = body.getPosition().y;
 
         velocity = body.getLinearVelocity();
 
-        /*if (accelX == -1) {
+        if (accelX == -1) {
             velocity.x = -WALK_SPEED;
-            Left = !Right && !Front && !Back;
+            //Left = !Right && !Front && !Back;
         } else if (accelX == 1) {
             velocity.x = WALK_SPEED;
-            Right = !Left && !Front && !Back;
+            //Right = !Left && !Front && !Back;
         } else {
             velocity.x = 0;
+
         }
 
         if (accelY == -1) {
             velocity.y = -WALK_SPEED;
-            Front = !Left && !Right && !Back;
+            //Front = !Left && !Right && !Back;
         } else if (accelY == 1) {
             velocity.y = WALK_SPEED;
-            Back = !Left && !Front && !Back;
+            //Back = !Left && !Right && !Front;
         } else {
             velocity.y = 0;
-        }*/
+        }
 
         body.setLinearVelocity(velocity);
         stateTime += delta;

@@ -8,7 +8,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 public class AssetsGoblins {
     public static Sprite straight;
 
-    static Animation<Sprite> walkFront, walkBack, walkRight, walkLeft;
+    public static Animation<Sprite> walkFront;
+    public static Animation<Sprite> walkBack;
+    public static Animation<Sprite> walkRight;
+    public static Animation<Sprite> walkLeft;
 
     static TextureAtlas atlas;
 

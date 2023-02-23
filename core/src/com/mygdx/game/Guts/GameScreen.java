@@ -1,7 +1,5 @@
 package com.mygdx.game.Guts;
 
-import static com.mygdx.game.Goblins.Goblins.GoblinsState.IDLE;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -16,21 +14,14 @@ import com.mygdx.game.Goblins.Goblins;
 import com.mygdx.game.MainGame;
 import com.mygdx.game.Screens;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class GameScreen extends Screens {
 
     World oWorld;
 
     Guts guts;
-
     Goblins goblin;
 
     Array<Body> arrBodies;
-
-    List<Goblins> goblinsList;
-    private static Array<Goblins> goblins;
 
     Box2DDebugRenderer renderer;
 
@@ -46,14 +37,9 @@ public class GameScreen extends Screens {
         oWorld = new World(gravity, true);
 
         arrBodies = new Array<>();
-        goblins = new Array<Goblins>();
-
-        //this.goblinsList = new ArrayList<Goblins>();
-
-        renderer = new Box2DDebugRenderer();
 
         createGuts();
-        createGoblins();
+        createGoblin();
     }
 
     private void createGuts() {
@@ -73,55 +59,52 @@ public class GameScreen extends Screens {
         shape.dispose();
     }
 
-    private void createGoblins() {
+    private void createGoblin() {
         goblin = new Goblins(4, 5);
         BodyDef bd = new BodyDef();
         bd.position.x = goblin.position.x;
         bd.position.y = goblin.position.y;
         bd.type = BodyDef.BodyType.DynamicBody;
 
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(Goblins.Width, Goblins.Height);
+        PolygonShape shape2 = new PolygonShape();
+        shape2.setAsBox(Goblins.Width, Goblins.Height);
 
-        FixtureDef fixDef = new FixtureDef();
-        fixDef.shape = shape;
-        fixDef.restitution = 0;
-        fixDef.density = 15;
 
         Body oBody = oWorld.createBody(bd);
-        oBody.createFixture(fixDef);
         oBody.setUserData(goblin);
 
-        shape.dispose();
+        shape2.dispose();
     }
+
 
     @Override
     public void update(float delta) {
-        float accelX = 0, accelY = 0;
+        float accelXGuts = 0, accelYGuts = 0;
+        float accelXGoblins = 0, accelYGoblins = 0;
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-            accelX = -1;
+            accelXGuts = -1;
             guts.Left = false;
             guts.Right = true;
             guts.Front = false;
             guts.Back = false;
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            accelX = 1;
+            accelXGuts = 1;
             guts.Right = false;
             guts.Left = true;
             guts.Front = false;
             guts.Back = false;
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            accelY = -1;
+            accelYGuts = -1;
             guts.Left = false;
             guts.Right = false;
             guts.Front = true;
             guts.Back = false;
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            accelY = 1;
+            accelYGuts = 1;
             guts.Left = false;
             guts.Right = false;
             guts.Front = false;
@@ -134,13 +117,56 @@ public class GameScreen extends Screens {
             guts.Back = false;
         }
 
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A)){
+            accelXGoblins = -1;
+            goblin.Left = false;
+            goblin.Right = true;
+            goblin.Front = false;
+            goblin.Back = false;
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            accelXGoblins = 1;
+            goblin.Right = false;
+            goblin.Left = true;
+            goblin.Front = false;
+            goblin.Back = false;
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            accelYGoblins = -1;
+            goblin.Left = false;
+            goblin.Right = false;
+            goblin.Front = true;
+            goblin.Back = false;
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            accelYGoblins = 1;
+            goblin.Left = false;
+            goblin.Right = false;
+            goblin.Front = false;
+            goblin.Back = true;
+        }
+        else {
+            goblin.Left = false;
+            goblin.Right = false;
+            goblin.Front = false;
+            goblin.Back = false;
+        }
+
         oWorld.step(delta, 8, 6);
         oWorld.getBodies(arrBodies);
 
         for (Body body : arrBodies) {
             if (body.getUserData() instanceof Guts) {
                 Guts obj = (Guts) body.getUserData();
-                obj.update(body, delta, accelX, accelY);
+                obj.update(body, delta, accelXGuts, accelYGuts);
+            }
+        }
+
+        for (Body body : arrBodies){
+            if(body.getUserData() instanceof Goblins) {
+                Goblins obj = (Goblins) body.getUserData();
+                obj.update(body, delta,accelXGoblins,accelYGoblins);
             }
         }
 
@@ -188,10 +214,34 @@ public class GameScreen extends Screens {
         spriteBatch.begin();
 
         drawGuts();
-        //drawGoblins();
+        drawGoblins();
 
         spriteBatch.end();
-        renderer.render(oWorld, oCamBox2D.combined);
+        //renderer.render(oWorld, oCamBox2D.combined);
+    }
+
+    private void drawGoblins() {
+        keyframeGoblins = AssetsGoblins.straight;
+
+        if (goblin.Front) {
+            keyframeGoblins = AssetsGoblins.walkFront.getKeyFrame(goblin.stateTime, true);
+        } else if (goblin.Back) {
+            keyframeGoblins = AssetsGoblins.walkBack.getKeyFrame(goblin.stateTime, true);
+        } else if (goblin.Right) {
+            keyframeGoblins = AssetsGoblins.walkRight.getKeyFrame(goblin.stateTime, true);
+        } else if (goblin.Left) {
+            keyframeGoblins = AssetsGoblins.walkLeft.getKeyFrame(goblin.stateTime, true);
+        }
+
+        if (goblin.velocity.x < 0 || goblin.velocity.y <= 0) {
+            keyframeGoblins.setPosition(goblin.position.x + Goblins.Draw_Width/2, goblin.position.y - Goblins.Draw_Height/2 + .25f);
+            keyframeGoblins.setSize(-Goblins.Draw_Width, Goblins.Draw_Height);
+        } else {
+            keyframeGoblins.setPosition(goblin.position.x - Goblins.Draw_Width/2, goblin.position.y - Goblins.Draw_Height/2 + .25f);
+            keyframeGoblins.setSize(Goblins.Draw_Width, Goblins.Draw_Height);
+        }
+
+        keyframeGoblins.draw(spriteBatch);
     }
 
     private void drawGuts() {
@@ -218,32 +268,6 @@ public class GameScreen extends Screens {
 
         keyframeGuts.draw(spriteBatch);
     }
-
-    private void drawGoblins() {
-        keyframeGoblins = AssetsGoblins.straight;
-
-        if (goblin.Front) {
-            keyframeGoblins = AssetsManager.walkFront.getKeyFrame(goblin.stateTime, true);
-        } else if (goblin.Back) {
-            keyframeGoblins = AssetsManager.walkBack.getKeyFrame(goblin.stateTime, true);
-        } else if (goblin.Right) {
-            keyframeGoblins = AssetsManager.walkRight.getKeyFrame(goblin.stateTime, true);
-        } else if (goblin.Left) {
-            keyframeGoblins = AssetsManager.walkLeft.getKeyFrame(goblin.stateTime, true);
-        }
-
-        if (goblin.velocity.x < 0) {
-            keyframeGoblins.setPosition(goblin.position.x + Goblins.Draw_Width/2, goblin.position.y - Goblins.Draw_Height/2 + .25f);
-            keyframeGoblins.setSize(-Goblins.Draw_Width, Goblins.Draw_Height);
-        } else {
-            keyframeGoblins.setPosition(goblin.position.x - Goblins.Draw_Width/2, goblin.position.y - Goblins.Draw_Height/2 + .25f);
-            keyframeGoblins.setSize(Goblins.Draw_Width, Goblins.Draw_Height);
-
-        }
-
-        keyframeGoblins.draw(spriteBatch);
-    }
-
 
     @Override
     public void dispose() {
