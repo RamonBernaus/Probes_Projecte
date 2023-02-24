@@ -153,6 +153,11 @@ public class GameScreen extends Screens {
             goblin.Back = false;
         }
 
+        if (Gdx.input.isKeyPressed(Input.Keys.J)){
+            guts.reduceHP(10);
+            int hp = guts.getHP();
+        }
+
         oWorld.step(delta, 8, 6);
         oWorld.getBodies(arrBodies);
 

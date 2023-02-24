@@ -1,5 +1,6 @@
 package com.mygdx.game.Guts;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
@@ -16,7 +17,8 @@ public class Guts {
     static final float Walk_Frame_Duration = 0.25f;
 
     static final float WALK_SPEED = 3;
-
+    private int hp;
+    private ShapeRenderer shapeRenderer;
     boolean Right;
     boolean Left;
     boolean Front;
@@ -31,6 +33,9 @@ public class Guts {
 
     public Guts(float x, float y) {
         position = new Vector2(x, y);
+        hp = 100;
+        shapeRenderer = new ShapeRenderer();
+
     }
 
     public void update(Body body, float delta, float accelX, float accelY) {
@@ -63,6 +68,27 @@ public class Guts {
 
         body.setLinearVelocity(velocity);
         stateTime += delta;
+    }
+
+    // Método para reducir HP
+    public void reduceHP(int damage) {
+        hp -= damage;
+        if (hp < 0) {
+            hp = 0; // Asegura que HP no sea negativo
+        }
+    }
+
+    // Método para aumentar HP
+    public void increaseHP(int heal) {
+        hp += heal;
+        if (hp > 100) {
+            hp = 100; // Asegura que HP no sea mayor que 100
+        }
+    }
+
+    // Método para obtener el valor de HP
+    public int getHP() {
+        return hp;
     }
 
 }

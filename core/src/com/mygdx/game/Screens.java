@@ -5,15 +5,18 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.Guts.GameScreen;
+import com.mygdx.game.Guts.Guts;
 
 public abstract class Screens extends InputAdapter implements Screen {
     public static final float SCREEN_WIDTH = 1600;
@@ -23,6 +26,7 @@ public abstract class Screens extends InputAdapter implements Screen {
     public static final float WORLD_HEIGHT = 4.8f;
 
     public MainGame game;
+    public Guts guts;
 
     public OrthographicCamera oCamUI;
     public OrthographicCamera oCamBox2D;
@@ -74,6 +78,20 @@ public abstract class Screens extends InputAdapter implements Screen {
 
         // Draw the game elements on the screen
         draw(delta);
+
+        //Creem la barar de vida
+        ShapeRenderer shapeRenderer;
+        shapeRenderer = new ShapeRenderer();
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.GREEN);
+        float hpRatio = (float)guts.getHP() / 100f; // Calcula la proporción de HP restante
+        if(hpRatio < 50){
+            shapeRenderer.setColor(Color.ORANGE);
+        } else if (hpRatio < 25){
+            shapeRenderer.setColor(Color.RED);
+        }
+        shapeRenderer.rect(10, 10, 200 * hpRatio, 20); // Dibuja el rectángulo de la barra de HP
+        shapeRenderer.end();
 
         // Spawnear un Goblin cada 2 segundos en una posición aleatoria
         /*if (TimeUtils.nanoTime() % 2000000000 == 0) {
