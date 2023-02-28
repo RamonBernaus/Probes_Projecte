@@ -16,11 +16,6 @@ public class Goblins {
 
     static final float WALK_SPEED = 3;
 
-    public boolean Right;
-    public boolean Left;
-    public boolean Front;
-    public boolean Back;
-
     public float stateTime = 0;
     private GoblinsState state;
     public Vector2 position;
@@ -30,38 +25,14 @@ public class Goblins {
         position = new Vector2(x, y);
     }
 
-    public void update(Body body, float delta, float accelX, float accelY) {
-        position.x = body.getPosition().x;
-        position.y = body.getPosition().y;
+    public void moveTowards(Vector2 target) {
+        // Calcula la dirección hacia el objetivo
+        Vector2 direction = target.sub(position).nor();
 
-        velocity = body.getLinearVelocity();
-
-        if (accelX == -1) {
-            velocity.x = -WALK_SPEED;
-            //Left = !Right && !Front && !Back;
-        } else if (accelX == 1) {
-            velocity.x = WALK_SPEED;
-            //Right = !Left && !Front && !Back;
-        } else {
-            velocity.x = 0;
-
-        }
-
-        if (accelY == -1) {
-            velocity.y = -WALK_SPEED;
-            //Front = !Left && !Right && !Back;
-        } else if (accelY == 1) {
-            velocity.y = WALK_SPEED;
-            //Back = !Left && !Right && !Front;
-        } else {
-            velocity.y = 0;
-        }
-
-        body.setLinearVelocity(velocity);
-        stateTime += delta;
+        // Mueve al Goblin hacia el objetivo con una velocidad fija
+        float speed = 2f;
+        position.add(direction.scl(speed));
     }
-
-
 
 
     public GoblinsState getState() {

@@ -52,10 +52,8 @@ public class Guts {
 
         if (accelX == -1) {
             velocity.x = -WALK_SPEED;
-            //Left = !Right && !Front && !Back;
         } else if (accelX == 1) {
             velocity.x = WALK_SPEED;
-            //Right = !Left && !Front && !Back;
         } else {
             velocity.x = 0;
 
@@ -63,10 +61,8 @@ public class Guts {
 
         if (accelY == -1) {
             velocity.y = -WALK_SPEED;
-            //Front = !Left && !Right && !Back;
         } else if (accelY == 1) {
             velocity.y = WALK_SPEED;
-            //Back = !Left && !Right && !Front;
         } else {
             velocity.y = 0;
         }

@@ -12,10 +12,11 @@ import utils.Main;
 
 public class MainScreens extends Screens{
     ScrollPane scroll;
-
+    DeadScreen deadScreen;
     public MainScreens (MainGame game) {
         super(game);
 
+        deadScreen = new DeadScreen();
         Table menu = new Table();
         menu.defaults().expandY().fillY();
 

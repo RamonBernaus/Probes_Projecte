@@ -20,6 +20,8 @@ public class Assets {
     public static ScrollPane.ScrollPaneStyle scrollPaneStyle;
     public static Texture backgroundTexture = new Texture("BackgroundMenuTitle.jpg");
     public static Sprite backgroundSprite = new Sprite(backgroundTexture);
+    public static Texture DeadScreenTexture = new Texture("DeadScreen.png");
+    public static Sprite DeadScreenSprite = new Sprite(DeadScreenTexture);
 
     public static void load() {
         font = new BitmapFont();

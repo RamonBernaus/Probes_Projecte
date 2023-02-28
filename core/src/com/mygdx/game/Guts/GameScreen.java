@@ -3,7 +3,9 @@ package com.mygdx.game.Guts;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -11,30 +13,37 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Assets;
+import com.mygdx.game.DeadScreen;
 import com.mygdx.game.Goblins.AssetsGoblins;
 import com.mygdx.game.Goblins.Goblins;
 import com.mygdx.game.MainGame;
-import com.mygdx.game.MainScreens;
 import com.mygdx.game.Screens;
 
+import java.util.List;
+
 public class GameScreen extends Screens {
+    Texture goblinTexture = new Texture("GoblinAtacFront-4.png");
 
     World oWorld;
 
+    DeadScreen deadScreen;
     Guts guts;
-    Goblins goblin;
 
     Array<Body> arrBodies;
+    List<Goblins> goblin;
 
-    Box2DDebugRenderer renderer;
+    Vector2 gutsPosition;
+
+    float detectionRadius = 100f;
 
     Sprite keyframeGuts;
-    Sprite keyframeGoblins;
 
     public GameScreen(MainGame game) {
         super(game);
         AssetsManager.load();
         AssetsGoblins.load();
+
+        deadScreen = new DeadScreen();
 
         Vector2 gravity = new Vector2(0, 0);
         oWorld = new World(gravity, true);
@@ -42,7 +51,6 @@ public class GameScreen extends Screens {
         arrBodies = new Array<>();
 
         createGuts();
-        createGoblin();
     }
 
     private void createGuts() {
@@ -62,22 +70,6 @@ public class GameScreen extends Screens {
         shape.dispose();
     }
 
-    private void createGoblin() {
-        goblin = new Goblins(4, 5);
-        BodyDef bd = new BodyDef();
-        bd.position.x = goblin.position.x;
-        bd.position.y = goblin.position.y;
-        bd.type = BodyDef.BodyType.DynamicBody;
-
-        PolygonShape shape2 = new PolygonShape();
-        shape2.setAsBox(Goblins.Width, Goblins.Height);
-
-
-        Body oBody = oWorld.createBody(bd);
-        oBody.setUserData(goblin);
-
-        shape2.dispose();
-    }
 
     @Override
     public void render(float delta) {
@@ -88,21 +80,39 @@ public class GameScreen extends Screens {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.GREEN);
         float hpRatio = (float)guts.getHP() / 100f; // Calcula la proporción de HP restante
-        if(hpRatio < 5f){
+        if(hpRatio <= 0.5f && hpRatio >= 0.25f){
             shapeRenderer.setColor(Color.ORANGE);
-        } else if (hpRatio < 2.5f){
+        } else if (hpRatio <= 0.25f){
             shapeRenderer.setColor(Color.RED);
         } else if (hpRatio <= 0){
-            Gdx.app.exit();
+            game.setScreen(deadScreen);
         }
         shapeRenderer.rect(10, 10, 200 * hpRatio, 20); // Dibuja el rectángulo de la barra de HP
+
+
+        // Actualiza la posición de cada Goblin
+        for (Goblins goblin: goblin) {
+            // Calcula la distancia entre el Goblin y Guts
+            float distance = gutsPosition.dst(goblin.position);
+
+            // Si el Goblin está dentro del radio de detección, muévelo hacia Guts
+            if (distance <= detectionRadius) {
+                goblin.moveTowards(gutsPosition);
+            }
+        }
+
+        SpriteBatch batch;
+        batch = new SpriteBatch();
+        batch.begin();
+        drawGoblins(batch);
+        batch.end();
+
         shapeRenderer.end();
     }
 
     @Override
     public void update(float delta) {
         float accelXGuts = 0, accelYGuts = 0;
-        float accelXGoblins = 0, accelYGoblins = 0;
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){
             accelXGuts = -1;
@@ -139,45 +149,8 @@ public class GameScreen extends Screens {
             guts.Back = false;
         }
 
-
-        if (Gdx.input.isKeyPressed(Input.Keys.A)){
-            accelXGoblins = -1;
-            goblin.Left = false;
-            goblin.Right = true;
-            goblin.Front = false;
-            goblin.Back = false;
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            accelXGoblins = 1;
-            goblin.Right = false;
-            goblin.Left = true;
-            goblin.Front = false;
-            goblin.Back = false;
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            accelYGoblins = -1;
-            goblin.Left = false;
-            goblin.Right = false;
-            goblin.Front = true;
-            goblin.Back = false;
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            accelYGoblins = 1;
-            goblin.Left = false;
-            goblin.Right = false;
-            goblin.Front = false;
-            goblin.Back = true;
-        }
-        else {
-            goblin.Left = false;
-            goblin.Right = false;
-            goblin.Front = false;
-            goblin.Back = false;
-        }
-
         if (Gdx.input.isKeyPressed(Input.Keys.J)){
             guts.reduceHP(1);
-            int hp = guts.getHP();
         }
 
         oWorld.step(delta, 8, 6);
@@ -190,37 +163,29 @@ public class GameScreen extends Screens {
             }
         }
 
-        for (Body body : arrBodies){
-            if(body.getUserData() instanceof Goblins) {
-                Goblins obj = (Goblins) body.getUserData();
-                obj.update(body, delta,accelXGoblins,accelYGoblins);
-            }
-        }
-
 /*        for (Goblins goblins : goblinsList) {
-            switch (goblins.getState()) {
+            switch (goblin.getState()) {
                 case IDLE:
                     // Si el personaje está dentro del rango de detección del enemigo, cambia al estado de persecución
-                    if (goblins.position.dst(guts.position) < 50) {
-                        goblins.setState(Goblins.GoblinsState.CHASE);
+                    if (goblin.position.dst(guts.position) < 50) {
+                        goblin.setState(Goblins.GoblinsState.CHASE);
                     }
                     break;
                 case CHASE:
                     // Mueve al enemigo en dirección al personaje
-                    Vector2 direction = new Vector2(guts.position).sub(goblins.position).nor();
-                    goblins.position.add(direction.scl(goblins.velocity));
+                    Vector2 direction = new Vector2(guts.position).sub(goblin.position).nor();
+                    goblin.position.add(direction.scl(goblin.velocity));
                     // Si el enemigo está lo suficientemente cerca del personaje, cambia al estado de ataque
-                    if (goblins.position.dst(guts.position) < 10) {
-                        goblins.setState(Goblins.GoblinsState.ATTACK);
+                    if (goblin.position.dst(guts.position) < 10) {
+                        goblin.setState(Goblins.GoblinsState.ATTACK);
                     }
                     break;
                 case ATTACK:
                     // Ataca al personaje
                     //guts.takeDamage(10);
                     break;
-            }
-        }*/
-    }
+            }*/
+        }
 
     @Override
     public void draw(float delta) {
@@ -241,12 +206,20 @@ public class GameScreen extends Screens {
         spriteBatch.begin();
 
         drawGuts();
-        drawGoblins();
+        //drawGoblins();
+
 
         spriteBatch.end();
     }
 
-    private void drawGoblins() {
+    public void drawGoblins(SpriteBatch batch) {
+        for (Goblins goblin : goblin) {
+            batch.draw(goblinTexture, goblin.position.x, goblin.position.y);
+        }
+    }
+
+
+    /*private void drawGoblins() {
         keyframeGoblins = AssetsGoblins.straight;
 
         if (goblin.Front) {
@@ -259,7 +232,7 @@ public class GameScreen extends Screens {
             keyframeGoblins = AssetsGoblins.walkLeft.getKeyFrame(goblin.stateTime, true);
         }
 
-        if (goblin.velocity.x < 0 || goblin.velocity.y <= 0) {
+        if (goblin.velocity.x <= 0 || goblin.velocity.y <= 0) {
             keyframeGoblins.setPosition(goblin.position.x + Goblins.Draw_Width/2, goblin.position.y - Goblins.Draw_Height/2 + .25f);
             keyframeGoblins.setSize(-Goblins.Draw_Width, Goblins.Draw_Height);
         } else {
@@ -268,7 +241,7 @@ public class GameScreen extends Screens {
         }
 
         keyframeGoblins.draw(spriteBatch);
-    }
+    }*/
 
     private void drawGuts() {
         keyframeGuts = AssetsManager.straight;
