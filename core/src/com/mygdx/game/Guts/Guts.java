@@ -1,13 +1,17 @@
 package com.mygdx.game.Guts;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-
-
+import com.mygdx.game.MainGame;
+import com.mygdx.game.MainScreens;
+import com.mygdx.game.Screens;
 
 
 public class Guts {
+    public MainGame game;
+
     static final float Width = 52;
     static final float Height = 52;
 
@@ -26,13 +30,14 @@ public class Guts {
 
     float stateTime = 0;
 
-    Vector2 position;
+    public Vector2 position;
     Vector2 velocity;
 
 
 
-    public Guts(float x, float y) {
+    public Guts(float x, float y, MainGame game) {
         position = new Vector2(x, y);
+        this.game = game;
         hp = 100;
         shapeRenderer = new ShapeRenderer();
 
@@ -75,6 +80,7 @@ public class Guts {
         hp -= damage;
         if (hp < 0) {
             hp = 0; // Asegura que HP no sea negativo
+            game.setScreen(new MainScreens(game));
         }
     }
 

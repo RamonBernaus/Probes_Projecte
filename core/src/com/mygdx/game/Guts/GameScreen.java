@@ -2,7 +2,9 @@ package com.mygdx.game.Guts;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
@@ -12,6 +14,7 @@ import com.mygdx.game.Assets;
 import com.mygdx.game.Goblins.AssetsGoblins;
 import com.mygdx.game.Goblins.Goblins;
 import com.mygdx.game.MainGame;
+import com.mygdx.game.MainScreens;
 import com.mygdx.game.Screens;
 
 public class GameScreen extends Screens {
@@ -43,7 +46,7 @@ public class GameScreen extends Screens {
     }
 
     private void createGuts() {
-        guts = new Guts(4, 5);
+        guts = new Guts(4, 5, game);
         BodyDef bd = new BodyDef();
         bd.position.x = guts.position.x;
         bd.position.y = guts.position.y;
@@ -76,6 +79,25 @@ public class GameScreen extends Screens {
         shape2.dispose();
     }
 
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+        //Creem la barar de vida
+        ShapeRenderer shapeRenderer;
+        shapeRenderer = new ShapeRenderer();
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.GREEN);
+        float hpRatio = (float)guts.getHP() / 100f; // Calcula la proporción de HP restante
+        if(hpRatio < 5f){
+            shapeRenderer.setColor(Color.ORANGE);
+        } else if (hpRatio < 2.5f){
+            shapeRenderer.setColor(Color.RED);
+        } else if (hpRatio <= 0){
+            Gdx.app.exit();
+        }
+        shapeRenderer.rect(10, 10, 200 * hpRatio, 20); // Dibuja el rectángulo de la barra de HP
+        shapeRenderer.end();
+    }
 
     @Override
     public void update(float delta) {
@@ -154,7 +176,7 @@ public class GameScreen extends Screens {
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.J)){
-            guts.reduceHP(10);
+            guts.reduceHP(1);
             int hp = guts.getHP();
         }
 
@@ -222,7 +244,6 @@ public class GameScreen extends Screens {
         drawGoblins();
 
         spriteBatch.end();
-        //renderer.render(oWorld, oCamBox2D.combined);
     }
 
     private void drawGoblins() {
