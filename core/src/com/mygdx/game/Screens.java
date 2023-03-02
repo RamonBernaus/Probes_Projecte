@@ -24,7 +24,7 @@ public abstract class Screens extends InputAdapter implements Screen {
 
     public static final float WORLD_WIDTH = 8f;
     public static final float WORLD_HEIGHT = 4.8f;
-
+    public  Guts guts;
     public MainGame game;
 
     public OrthographicCamera oCamUI;
@@ -34,7 +34,6 @@ public abstract class Screens extends InputAdapter implements Screen {
 
     public Screens(MainGame game) {
         this.game = game;
-
         // We will add UI elements to the stage
         stage = new Stage(new StretchViewport(Screens.SCREEN_WIDTH, Screens.SCREEN_HEIGHT));
 
@@ -63,16 +62,19 @@ public abstract class Screens extends InputAdapter implements Screen {
         // Update the stage (mostly UI elements)
         stage.act(delta);
 
-        // Clear everything on the screen
-//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         // Borra la pantalla
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Dibuja el inicio de panatalla
         spriteBatch.begin();
-        Assets.backgroundSprite.draw(spriteBatch);
+
+        if(!Guts.Dead) {
+            Assets.backgroundSprite.draw(spriteBatch);
+        } else if(Guts.Dead){
+            Assets.DeadScreenSprite.draw(spriteBatch);
+        }
+
         spriteBatch.end();
 
         // Draw the game elements on the screen
@@ -80,16 +82,6 @@ public abstract class Screens extends InputAdapter implements Screen {
 
         // Draw the stage element on the screen
         stage.draw();
-
-
-
-        // Spawnear un Goblin cada 2 segundos en una posición aleatoria
-        /*if (TimeUtils.nanoTime() % 2000000000 == 0) {
-            float x = MathUtils.random(0, Gdx.graphics.getWidth());
-            float y = MathUtils.random(0, Gdx.graphics.getHeight());
-            GameScreen.spawnGoblin(x, y);
-        }*/
-
     }
 
     public abstract void draw(float delta);

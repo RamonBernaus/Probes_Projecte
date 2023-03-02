@@ -1,15 +1,19 @@
 package com.mygdx.game.Guts;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.mygdx.game.Assets;
+import com.mygdx.game.DeadScreen;
 import com.mygdx.game.MainGame;
 import com.mygdx.game.MainScreens;
 import com.mygdx.game.Screens;
 
 
-public class Guts {
+public class Guts extends Actor {
     public MainGame game;
 
     static final float Width = 52;
@@ -21,12 +25,13 @@ public class Guts {
     static final float Walk_Frame_Duration = 0.25f;
 
     static final float WALK_SPEED = 3;
-    private int hp;
+    private static int hp;
     private ShapeRenderer shapeRenderer;
     boolean Right;
     boolean Left;
     boolean Front;
     boolean Back;
+    public static boolean Dead;
 
     float stateTime = 0;
 
@@ -40,7 +45,6 @@ public class Guts {
         this.game = game;
         hp = 100;
         shapeRenderer = new ShapeRenderer();
-
     }
 
     public void update(Body body, float delta, float accelX, float accelY) {
@@ -56,7 +60,6 @@ public class Guts {
             velocity.x = WALK_SPEED;
         } else {
             velocity.x = 0;
-
         }
 
         if (accelY == -1) {
@@ -73,9 +76,11 @@ public class Guts {
 
     // Método para reducir HP
     public void reduceHP(int damage) {
+        Screen DeadScreen = new DeadScreen();
         hp -= damage;
         if (hp < 0) {
             hp = 0; // Asegura que HP no sea negativo
+            Dead = true;
             game.setScreen(new MainScreens(game));
         }
     }

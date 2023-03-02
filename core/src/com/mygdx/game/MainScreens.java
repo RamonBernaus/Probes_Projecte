@@ -16,7 +16,6 @@ public class MainScreens extends Screens{
     public MainScreens (MainGame game) {
         super(game);
 
-        deadScreen = new DeadScreen();
         Table menu = new Table();
         menu.defaults().expandY().fillY();
 

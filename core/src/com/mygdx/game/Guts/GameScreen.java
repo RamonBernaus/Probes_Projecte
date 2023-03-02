@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -19,7 +20,9 @@ import com.mygdx.game.Goblins.Goblins;
 import com.mygdx.game.MainGame;
 import com.mygdx.game.Screens;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GameScreen extends Screens {
     Texture goblinTexture = new Texture("GoblinAtacFront-4.png");
@@ -30,18 +33,20 @@ public class GameScreen extends Screens {
     Guts guts;
 
     Array<Body> arrBodies;
-    List<Goblins> goblin;
+    ArrayList<Goblins> goblinsList;
 
     Vector2 gutsPosition;
 
-    float detectionRadius = 100f;
+    float detectionRadius = 20f;
 
     Sprite keyframeGuts;
+    Sprite keyframeGoblins;
 
     public GameScreen(MainGame game) {
         super(game);
         AssetsManager.load();
         AssetsGoblins.load();
+        stage = new Stage();
 
         deadScreen = new DeadScreen();
 
@@ -51,10 +56,16 @@ public class GameScreen extends Screens {
         arrBodies = new Array<>();
 
         createGuts();
+        createGoblins();
+
+
     }
 
     private void createGuts() {
+        // Creem al guts
         guts = new Guts(4, 5, game);
+        gutsPosition = guts.position;
+        // Creem la "HitBox"
         BodyDef bd = new BodyDef();
         bd.position.x = guts.position.x;
         bd.position.y = guts.position.y;
@@ -63,10 +74,52 @@ public class GameScreen extends Screens {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Guts.Width, Guts.Height);
 
-
         Body oBody = oWorld.createBody(bd);
         oBody.setUserData(guts);
 
+        // Tanquem el shape
+        shape.dispose();
+    }
+
+    public void createGoblins(){
+        // Creem l'objecte random
+        Random r = new Random();
+        float x ,y;
+        x = r.nextFloat();
+        y = r.nextFloat();
+
+        // Creem la "HitBox"
+        BodyDef bd = new BodyDef();
+        bd.type = BodyDef.BodyType.DynamicBody;
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(Goblins.Width, Goblins.Height);
+
+        Body oBody = oWorld.createBody(bd);
+        oBody.setUserData(goblinsList);
+
+        // Comencem amb 3 asteroides
+        int numerogoblins = 1;
+
+        // Creem l'ArrayList
+        goblinsList = new ArrayList<>();
+
+        // Afegim el primer asteroide a l'array i al grup
+        Goblins goblin = new Goblins(x,y);
+        goblinsList.add(goblin);
+        //addActor(asteroid);
+
+        // Des del segon fins l'últim asteroide
+        for (int i = 1; i < numerogoblins; i++) {
+        // Afegim l'asteroide
+            goblin = new Goblins(x,y);
+        // Afegim l'asteroide a l'ArrayList
+            goblinsList.add(goblin);
+        // Afegim l'asteroide al grup d'actors
+            stage.addActor(goblin);
+        }
+
+        // Tanquem el shape
         shape.dispose();
     }
 
@@ -77,21 +130,28 @@ public class GameScreen extends Screens {
         //Creem la barar de vida
         ShapeRenderer shapeRenderer;
         shapeRenderer = new ShapeRenderer();
+
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.GREEN);
+
         float hpRatio = (float)guts.getHP() / 100f; // Calcula la proporción de HP restante
         if(hpRatio <= 0.5f && hpRatio >= 0.25f){
             shapeRenderer.setColor(Color.ORANGE);
         } else if (hpRatio <= 0.25f){
             shapeRenderer.setColor(Color.RED);
-        } else if (hpRatio <= 0){
-            game.setScreen(deadScreen);
         }
-        shapeRenderer.rect(10, 10, 200 * hpRatio, 20); // Dibuja el rectángulo de la barra de HP
+
+        shapeRenderer.rect(10, 750, 200 * hpRatio, 20); // Dibuja el rectángulo de la barra de HP
+
+        SpriteBatch batch;
+        batch = new SpriteBatch();
+
+        batch.begin();
+        drawGoblins(batch);
 
 
         // Actualiza la posición de cada Goblin
-        for (Goblins goblin: goblin) {
+        for (Goblins goblin: goblinsList) {
             // Calcula la distancia entre el Goblin y Guts
             float distance = gutsPosition.dst(goblin.position);
 
@@ -100,13 +160,7 @@ public class GameScreen extends Screens {
                 goblin.moveTowards(gutsPosition);
             }
         }
-
-        SpriteBatch batch;
-        batch = new SpriteBatch();
-        batch.begin();
-        drawGoblins(batch);
         batch.end();
-
         shapeRenderer.end();
     }
 
@@ -162,30 +216,7 @@ public class GameScreen extends Screens {
                 obj.update(body, delta, accelXGuts, accelYGuts);
             }
         }
-
-/*        for (Goblins goblins : goblinsList) {
-            switch (goblin.getState()) {
-                case IDLE:
-                    // Si el personaje está dentro del rango de detección del enemigo, cambia al estado de persecución
-                    if (goblin.position.dst(guts.position) < 50) {
-                        goblin.setState(Goblins.GoblinsState.CHASE);
-                    }
-                    break;
-                case CHASE:
-                    // Mueve al enemigo en dirección al personaje
-                    Vector2 direction = new Vector2(guts.position).sub(goblin.position).nor();
-                    goblin.position.add(direction.scl(goblin.velocity));
-                    // Si el enemigo está lo suficientemente cerca del personaje, cambia al estado de ataque
-                    if (goblin.position.dst(guts.position) < 10) {
-                        goblin.setState(Goblins.GoblinsState.ATTACK);
-                    }
-                    break;
-                case ATTACK:
-                    // Ataca al personaje
-                    //guts.takeDamage(10);
-                    break;
-            }*/
-        }
+    }
 
     @Override
     public void draw(float delta) {
@@ -213,10 +244,12 @@ public class GameScreen extends Screens {
     }
 
     public void drawGoblins(SpriteBatch batch) {
-        for (Goblins goblin : goblin) {
+            for (Goblins goblin : goblinsList) {
             batch.draw(goblinTexture, goblin.position.x, goblin.position.y);
+                System.out.println(goblin.position.x);
         }
     }
+
 
 
     /*private void drawGoblins() {

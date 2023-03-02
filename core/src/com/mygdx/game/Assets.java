@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.mygdx.game.Guts.Guts;
 
 public class Assets {
     public static BitmapFont font;
@@ -20,7 +21,7 @@ public class Assets {
     public static ScrollPane.ScrollPaneStyle scrollPaneStyle;
     public static Texture backgroundTexture = new Texture("BackgroundMenuTitle.jpg");
     public static Sprite backgroundSprite = new Sprite(backgroundTexture);
-    public static Texture DeadScreenTexture = new Texture("DeadScreen.png");
+    public static Texture DeadScreenTexture = new Texture("DeadScreen.jpg");
     public static Sprite DeadScreenSprite = new Sprite(DeadScreenTexture);
 
     public static void load() {
@@ -38,5 +39,4 @@ public class Assets {
                 atlas.createPatch("scroll"));
         scrollPaneStyle = new ScrollPane.ScrollPaneStyle(null, knob, knob, knob, knob);
     }
-
 }

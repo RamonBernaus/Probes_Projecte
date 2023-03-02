@@ -3,8 +3,9 @@ package com.mygdx.game.Goblins;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class Goblins {
+public class Goblins extends Actor {
     public static final float Width = 64;
     public static final float Height = 64;
 
@@ -17,7 +18,7 @@ public class Goblins {
     static final float WALK_SPEED = 3;
 
     public float stateTime = 0;
-    private GoblinsState state;
+    //private GoblinsState state;
     public Vector2 position;
     public Vector2 velocity;
 
@@ -30,12 +31,12 @@ public class Goblins {
         Vector2 direction = target.sub(position).nor();
 
         // Mueve al Goblin hacia el objetivo con una velocidad fija
-        float speed = 2f;
+        float speed = 20f;
         position.add(direction.scl(speed));
     }
 
 
-    public GoblinsState getState() {
+    /*public GoblinsState getState() {
         return state;
     }
 
@@ -47,5 +48,5 @@ public class Goblins {
         IDLE, // Enemigo inactivo
         CHASE, // Enemigo persiguiendo al personaje
         ATTACK // Enemigo atacando al personaje
-    }
+    }*/
 }
