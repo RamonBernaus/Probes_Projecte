@@ -14,7 +14,7 @@ import com.mygdx.game.Screens;
 
 
 public class Guts extends Actor {
-    public MainGame game;
+    public static MainGame game;
 
     static final float Width = 52;
     static final float Height = 52;
@@ -26,7 +26,7 @@ public class Guts extends Actor {
 
     static final float WALK_SPEED = 3;
     private static int hp;
-    private ShapeRenderer shapeRenderer;
+    private final ShapeRenderer shapeRenderer;
     boolean Right;
     boolean Left;
     boolean Front;
@@ -75,7 +75,7 @@ public class Guts extends Actor {
     }
 
     // Método para reducir HP
-    public void reduceHP(int damage) {
+    public static void reduceHP(int damage) {
         Screen DeadScreen = new DeadScreen();
         hp -= damage;
         if (hp < 0) {
@@ -97,5 +97,6 @@ public class Guts extends Actor {
     public int getHP() {
         return hp;
     }
+
 
 }

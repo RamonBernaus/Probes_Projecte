@@ -24,7 +24,7 @@ public abstract class Screens extends InputAdapter implements Screen {
 
     public static final float WORLD_WIDTH = 8f;
     public static final float WORLD_HEIGHT = 4.8f;
-    public  Guts guts;
+    public Guts guts;
     public MainGame game;
 
     public OrthographicCamera oCamUI;
@@ -69,9 +69,9 @@ public abstract class Screens extends InputAdapter implements Screen {
         // Dibuja el inicio de panatalla
         spriteBatch.begin();
 
-        if(!Guts.Dead) {
+        if (!Guts.Dead) {
             Assets.backgroundSprite.draw(spriteBatch);
-        } else if(Guts.Dead){
+        } else if (Guts.Dead) {
             Assets.DeadScreenSprite.draw(spriteBatch);
         }
 
