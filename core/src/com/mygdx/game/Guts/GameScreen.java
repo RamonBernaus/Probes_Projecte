@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -18,11 +17,9 @@ import com.mygdx.game.DeadScreen;
 import com.mygdx.game.Goblins.AssetsGoblins;
 import com.mygdx.game.Goblins.Goblins;
 import com.mygdx.game.MainGame;
-import com.mygdx.game.MyContactListener;
 import com.mygdx.game.Screens;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class GameScreen extends Screens {
@@ -78,7 +75,6 @@ public class GameScreen extends Screens {
 
         GutsBody = oWorld.createBody(bd);
         GutsBody.setUserData(guts);
-        MyContactListener.cuerpoGuts = GutsBody;
 
         // Tanquem el shape
         shape.dispose();
@@ -104,7 +100,6 @@ public class GameScreen extends Screens {
 
         GoblinBody = oWorld.createBody(bd);
         GoblinBody.setUserData(goblin_body);
-        MyContactListener.cuerpoGoblin = GoblinBody;
 
         // Tanquem el shape
         shape.dispose();
